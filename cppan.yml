@@ -1,0 +1,3 @@
+dependencies:
+    pvt.cppan.demo.google.tesseract.libtesseract: 3.05.01
+    pvt.cppan.demo.danbloomberg.leptonica: 1

@@ -1,0 +1,190 @@
+check_function_exists:
+    -   aligned_alloc
+    -   CC_SHA256_Init
+    -   clock_gettime
+    -   floor
+    -   fmemopen
+    -   fseeko
+    -   futimens
+    -   futimes
+    -   futimesat
+    -   getline
+    -   getopt
+    -   isascii
+    -   lfind
+    -   memalign
+    -   memmove
+    -   memset
+    -   mmap
+    -   posix_fadvise
+    -   posix_memalign
+    -   pow
+    -   pthread_condattr_setclock
+    -   setmode
+    -   SHA256Init
+    -   SHA256_Init
+    -   sqrt
+    -   strcasecmp
+    -   strchr
+    -   strrchr
+    -   strstr
+    -   strtol
+    -   strtoull
+    -   utime
+    -   utimes
+    -   _aligned_malloc
+
+check_include_exists:
+    -   file: assert.h
+        variable: HAVE_ASSERT_H
+        cpp: false
+    -   file: cairo/cairo-version.h
+        variable: HAVE_CAIRO_CAIRO_VERSION_H
+        cpp: false
+    -   file: CL/cl.h
+        variable: HAVE_CL_CL_H
+        cpp: false
+    -   file: CommonCrypto/CommonDigest.h
+        variable: HAVE_COMMONCRYPTO_COMMONDIGEST_H
+        cpp: false
+    -   file: dlfcn.h
+        variable: HAVE_DLFCN_H
+        cpp: false
+    -   file: fcntl.h
+        variable: HAVE_FCNTL_H
+        cpp: false
+    -   file: immintrin.h
+        variable: HAVE_IMMINTRIN_H
+        cpp: false
+    -   file: inttypes.h
+        variable: HAVE_INTTYPES_H
+        cpp: false
+    -   file: io.h
+        variable: HAVE_IO_H
+        cpp: false
+    -   file: limits.h
+        variable: HAVE_LIMITS_H
+        cpp: false
+    -   file: malloc.h
+        variable: HAVE_MALLOC_H
+        cpp: false
+    -   file: memory.h
+        variable: HAVE_MEMORY_H
+        cpp: false
+    -   file: minix/sha2.h
+        variable: HAVE_MINIX_SHA2_H
+        cpp: false
+    -   file: OpenCL/cl.h
+        variable: HAVE_OPENCL_CL_H
+        cpp: false
+    -   file: pango-1.0/pango/pango-features.h
+        variable: HAVE_PANGO_1_0_PANGO_PANGO_FEATURES_H
+        cpp: false
+    -   file: search.h
+        variable: HAVE_SEARCH_H
+        cpp: false
+    -   file: sha256.h
+        variable: HAVE_SHA256_H
+        cpp: false
+    -   file: sha2.h
+        variable: HAVE_SHA2_H
+        cpp: false
+    -   file: stdbool.h
+        variable: HAVE_STDBOOL_H
+        cpp: false
+    -   file: stdint.h
+        variable: HAVE_STDINT_H
+        cpp: false
+    -   file: stdlib.h
+        variable: HAVE_STDLIB_H
+        cpp: false
+    -   file: strings.h
+        variable: HAVE_STRINGS_H
+        cpp: false
+    -   file: string.h
+        variable: HAVE_STRING_H
+        cpp: false
+    -   file: sys/ipc.h
+        variable: HAVE_SYS_IPC_H
+        cpp: false
+    -   file: sys/shm.h
+        variable: HAVE_SYS_SHM_H
+        cpp: false
+    -   file: sys/stat.h
+        variable: HAVE_SYS_STAT_H
+        cpp: false
+    -   file: sys/time.h
+        variable: HAVE_SYS_TIME_H
+        cpp: false
+    -   file: sys/types.h
+        variable: HAVE_SYS_TYPES_H
+        cpp: false
+    -   file: sys/wait.h
+        variable: HAVE_SYS_WAIT_H
+        cpp: false
+    -   file: tiffio.h
+        variable: HAVE_TIFFIO_H
+        cpp: false
+    -   file: unicode/uchar.h
+        variable: HAVE_UNICODE_UCHAR_H
+        cpp: false
+    -   file: unistd.h
+        variable: HAVE_UNISTD_H
+        cpp: false
+
+check_type_size:
+    -   type: CC_SHA256_CTX
+    -   type: int16
+    -   type: int32
+    -   type: int32_t
+    -   type: int64_t
+    -   type: int8
+    -   type: long long int
+    -   type: mbstate_t
+    -   type: off_t
+    -   type: ptrdiff_t
+    -   type: SHA256_CTX
+    -   type: SHA2_CTX
+    -   type: signed int
+    -   type: signed long
+    -   type: signed long long
+    -   type: signed short
+    -   type: uint16_t
+    -   type: uint32_t
+    -   type: uint64_t
+    -   type: uint8_t
+    -   type: uintptr_t
+    -   type: unsigned char *
+    -   type: unsigned int
+    -   type: unsigned long
+    -   type: unsigned long long
+    -   type: unsigned short
+    -   type: wchar_t
+    -   type: _Bool
+
+check_symbol_exists:
+    -   symbol: snprintf
+        headers:
+            -   stdio.h
+
+check_decl_exists:
+    -   CLOCK_MONOTONIC
+    -   _mm_movemask_epi8
+
+checks:
+    HAVE_STRUCT_STAT_ST_ATIMENSEC:
+        text: CHECK_STRUCT_HAS_MEMBER("struct stat" st_atimensec "sys/stat.h" HAVE_STRUCT_STAT_ST_ATIMENSEC)
+        invert: false
+    HAVE_STRUCT_STAT_ST_ATIMESPEC_TV_NSEC:
+        text: CHECK_STRUCT_HAS_MEMBER("struct stat" st_atimespec.tv_nsec "sys/stat.h" HAVE_STRUCT_STAT_ST_ATIMESPEC_TV_NSEC)
+        invert: false
+    HAVE_STRUCT_STAT_ST_ATIM_ST__TIM_TV_NSEC:
+        text: CHECK_STRUCT_HAS_MEMBER("struct stat" st_atim.st__tim.tv_nsec "sys/stat.h" HAVE_STRUCT_STAT_ST_ATIM_ST__TIM_TV_NSEC)
+        invert: false
+    HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC:
+        text: CHECK_STRUCT_HAS_MEMBER("struct stat" st_atim.tv_nsec "sys/stat.h" HAVE_STRUCT_STAT_ST_ATIM_TV_NSEC)
+        invert: false
+    HAVE_STRUCT_STAT_ST_UATIME:
+        text: CHECK_STRUCT_HAS_MEMBER("struct stat" st_uatime "sys/stat.h" HAVE_STRUCT_STAT_ST_UATIME)
+        invert: false
+
