@@ -24,7 +24,9 @@ libev - a high performance full-featured event loop written in C
 ```
 sudo apt-get install libev-dev
 ```
-* [amqpcpp](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
+* [amqpcpp](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)  
+AMQP-CPP is a C++ library for communicating with a RabbitMQ message broker.
+
 
 # Build
 
