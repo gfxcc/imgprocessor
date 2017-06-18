@@ -18,6 +18,14 @@ sudo dpkg -i cppan-master-Linux-client.deb
 sudo apt-get install cmake
 ```
 
+* [libev](http://pod.tst.eu/http://cvs.schmorp.de/libev/ev.pod)  
+libev - a high performance full-featured event loop written in C  
+
+```
+sudo apt-get install libev-dev
+```
+* [amqpcpp](https://github.com/CopernicaMarketingSoftware/AMQP-CPP)
+
 # Build
 
 ```

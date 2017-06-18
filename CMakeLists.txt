@@ -27,7 +27,7 @@ endif()
 
 project (imgprocessor)
 message (STATUS "Project: ${PROJECT_NAME}")
-file (GLOB_RECURSE header ${PROJECT_SOURCE_DIR}/include/crk/*.h)
+file (GLOB_RECURSE header ${PROJECT_SOURCE_DIR}/include/*.h)
 file (GLOB_RECURSE source ${PROJECT_SOURCE_DIR}/src/*.cc )
 
 
@@ -47,7 +47,10 @@ set (CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 add_subdirectory (.cppan)
 
 # link_directories (${PROJECT_SOURCE_DIR}/thirdparty/ltp/lib/)
-# include_directories ()
+include_directories (
+  ${PROJECT_SOURCE_DIR}/include/
+
+  )
 
 # -----------------------------------------------
 # ADD EXECUTABLE TARGET
@@ -58,4 +61,6 @@ add_executable (imgprocessor ${source})
 target_link_libraries (imgprocessor
     pvt.cppan.demo.google.tesseract.libtesseract
     pvt.cppan.demo.danbloomberg.leptonica
+    amqpcpp
+    ev
 )

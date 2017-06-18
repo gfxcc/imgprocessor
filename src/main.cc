@@ -1,44 +1,85 @@
-#include <iostream>
+
 #include <memory>
+#include <ev.h>
+#include <amqpcpp.h>
+#include <amqpcpp/libev.h>
+#include <unistd.h>
+#include <json.hpp>
 
-#include <allheaders.h> // leptonica main header for image io
-#include <baseapi.h> // tesseract main header
+#include "tesseract.h"
+#include "status.h"
 
-int main(int argc, char *argv[])
+using namespace std;
+using json = nlohmann::json;
+
+int main()
 {
-  if (argc == 1)
-    return 1;
+  // create tesseract engine
+  Status s;
 
-  tesseract::TessBaseAPI tess;
+  Tesseract::Configure conf;
+  conf.path_lang = "/usr/share/tesseract-ocr/";
+  conf.lang = "chi_sim";
+  Tesseract* tesseract_ptr;
+  s = Tesseract::Init(conf, &tesseract_ptr);
+  shared_ptr<Tesseract> tesseract(tesseract_ptr);
 
-  if (tess.Init("/usr/share/tesseract-ocr/", "chi_sim"))
-  {
-    std::cout << "OCRTesseract: Could not initialize tesseract." << std::endl;
-    return 1;
+  if (!s.ok()) {
+    cout << "Error: " << s.msg << endl;
+    return -1;
   }
 
-  // setup
-  tess.SetPageSegMode(tesseract::PageSegMode::PSM_AUTO);
-  tess.SetVariable("save_best_choices", "T");
 
-  // read image
-  auto pixs = pixRead(argv[1]);
-  if (!pixs)
-  {
-    std::cout << "Cannot open input file: " << argv[1] << std::endl;
-    return 1;
-  }
+  // access to the event loop
+  auto *loop = EV_DEFAULT;
 
-  // recognize
-  tess.SetImage(pixs);
-  tess.Recognize(0);
+  AMQP::LibEvHandler handler(loop);
+  AMQP::TcpConnection connection(&handler, AMQP::Address("amqp://localhost/"));
+  AMQP::TcpChannel channel(&connection);
 
-  // get result and delete[] returned char* string
-  std::cout << std::unique_ptr<char[]>(tess.GetUTF8Text()).get() << std::endl;
+  // create a custom callback
+  auto callback = [](const std::string &name, int msgcount, int consumercount) {
+    // @todo add your own implementation
+    cout << "declare queue successed" <<endl;
+  };
 
-  // cleanup
-  tess.Clear();
-  pixDestroy(&pixs);
+  // declare the queue, and install the callback that is called on success
+  channel.declareQueue("task_identify_img").onSuccess(callback);
 
+  // callback function that is called when the consume operation starts
+  auto startCb = [](const std::string &consumertag) {
+    cout << "consume operation started" << endl;
+  };
+
+  // callback function that is called when the consume operation failed
+  auto errorCb = [](const char *message) {
+    cout << "consume operation failed" << endl;
+  };
+
+  // callback operation when a message was received
+  auto messageCb = [&channel, &tesseract](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+    cout << "task received" << endl;
+    json task_json = json::parse(string{message.body(), message.bodySize()});
+    string path(task_json["path_img"].get<string>()),
+           keyword(task_json["keyword"].get<string>());
+    cout << "path_img:" << path << endl;
+    cout << "keyword:" << keyword << endl;
+
+    string text;
+    tesseract->GetUTF8Text(path, text);
+
+    cout << "text:" << text << endl;
+    channel.ack(deliveryTag);
+  };
+
+  // start consuming from the queue, and install the callbacks
+  channel.consume("task_identify_img")
+    .onReceived(messageCb)
+    .onSuccess(startCb)
+    .onError(errorCb);
+  // run the loop
+  ev_run(loop, 0);
+
+  // done
   return 0;
 }
